@@ -20,8 +20,10 @@ if git.commits.any? { |c| c.message =~ /^Merge branch 'master'/ }
 end
 
 # Don't let testing shortcuts get into master by accident
-fail("fdescribe left in tests") if `grep -r fdescribe spec/ `.length > 1
-fail("fit left in tests") if `grep -r fit spec/ `.length > 1
+if Dir.exists?('spec')
+  fail("fdescribe left in tests") if `grep -r fdescribe spec/ `.length > 1
+  fail("fit left in tests") if `grep -r fit spec/ `.length > 1
+end
 
 if git.commits.any? {|c| c.message =~ /(fixup|squash)!/ }
   fail 'Contains a fixup or squash commit'
