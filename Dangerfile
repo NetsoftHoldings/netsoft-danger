@@ -21,8 +21,8 @@ end
 
 # Don't let testing shortcuts get into master by accident
 if Dir.exists?('spec')
-  fail("fdescribe left in tests") if `grep -r fdescribe spec/ `.length > 1
-  fail("fit left in tests") if `grep -r fit spec/ `.length > 1
+  fail("fdescribe left in tests") if `grep -r -e '\bfdescribe\b' spec/ `.length > 1
+  fail("fit left in tests") if `grep -r -e '\bfit\b' spec/ `.length > 1
 end
 
 if git.commits.any? {|c| c.message =~ /(fixup|squash)!/ }
