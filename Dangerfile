@@ -54,7 +54,7 @@ git.commits.each do |c|
     unless has_gemfile_msg
       fail '[gemfile] Gemfile commits need to be prefixed with [gemfile] ' + short
     end
-    if c.diff_parent.any? {|f| !( f.path =~ /Gemfile/ ) }
+    if c.diff_parent.any? {|f| !( f.path =~ /Gemfile/ || f.path =~ /gemspec/ ) }
       fail '[gemfile] Gemfile commit contains non-gemfile changes' + short
     end
   elsif has_gemfile_msg
