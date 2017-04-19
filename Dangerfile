@@ -36,12 +36,16 @@ git.commits.each do |c|
   has_migrations = c.diff_parent.any? {|f| f.path =~ /db\/migrate\// }
   has_schema_changes = c.diff_parent.any? {|f| f.path =~ /db\/schema\.rb/ }
   has_migration_msg = c.message =~ /^\[migration\]/
+  no_schema_ok = ENV['DANGER_NO_SCHEMA_OK'] || false
   if has_migrations || has_schema_changes
     unless has_migration_msg
       fail '[migration] Schema migration commits need to be prefixed with [migration]' + short
     end
-    if (has_migrations && !has_schema_changes) || (!has_migrations & has_schema_changes)
+    if has_migrations && !has_schema_changes && !no_schema_ok
       fail '[migration] Please checkin your schema.rb changes with your migration' + short
+    end
+    if !has_migrations && has_schema_changes
+      fail '[migration] Please checkin your migrations with your schema.rb changes' + short
     end
     if c.diff_parent.any? {|f| !( f.path =~ /db\/migrate\// or f.path =~ /db\/schema.rb/ ) } 
       fail '[migration] Migration commit contains non-migration changes' + short
