@@ -45,7 +45,7 @@ git.commits.each do |c|
       fail '[migration] Please checkin your schema.rb changes with your migration' + short
     end
     if !has_migrations && has_schema_changes
-      fail '[migration] Please checkin your migrations with your schema.rb changes' + short
+      warn '[migration] Please checkin your migrations with your schema.rb changes' + short
     end
     if c.diff_parent.any? {|f| !( f.path =~ /db\/migrate\// or f.path =~ /db\/schema.rb/ ) } 
       fail '[migration] Migration commit contains non-migration changes' + short
