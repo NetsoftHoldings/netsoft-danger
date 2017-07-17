@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_development_dependency 'rake'
-  s.add_runtime_dependency 'danger', '~> 5.0.0'
+  s.add_runtime_dependency 'danger', '~> 5.3.0'
 end
