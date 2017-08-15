@@ -54,6 +54,13 @@ git.commits.each do |c|
     fail '[migration] Migration commit with no migrations!' + short
   end
 
+  has_hubstaff_icon_changes = c.diff_parent.any? {|f| f.path =~ /hubstaff-icons/ }
+  if has_hubstaff_icon_changes
+    if c.diff_parent.any? {|f| !( f.path =~ /hubstaff-icons/) }
+      fail '[hubstaff-icons] Put hubstaff-icon changes into their own commit' + short
+    end
+  end
+
   has_gemfile_changes = c.diff_parent.any? {|f| f.path =~ /Gemfile/ || f.path =~ /gemspec/ }
   has_gemfile_msg = c.message =~ /^\[gemfile\]/
   if has_gemfile_changes
