@@ -22,6 +22,7 @@ end
 # Don't let testing shortcuts get into master by accident
 if Dir.exists?('spec')
   fail("fdescribe left in tests") if `grep -r -e '\\bfdescribe\\b' spec/ |grep -v 'danger ok' `.length > 1
+  fail("fcontext left in tests") if `grep -r -e '\\bfcontext\\b' spec/ |grep -v 'danger ok' `.length > 1
   fail("fit left in tests") if `grep -r -e '\\bfit\\b' spec/ | grep -v 'danger ok' `.length > 1
   fail("ap left in tests") if `grep -r -e '\\bap\\b' spec/ | grep -v 'danger ok' `.length > 1
   fail("puts left in tests") if `grep -r -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
