@@ -1,3 +1,3 @@
-mport {message} from "danger"
+import {message} from "danger"
 
-message("Hello from Peril on your new issue.")
+// message("Hello from Peril on your new issue.")
