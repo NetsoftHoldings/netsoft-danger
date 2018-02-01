@@ -4,8 +4,10 @@ if( ! danger.github.issue.labels.length ) {
     fail('Please add labels to this PR')
 }
 
+let labels = danger.github.issue.labels.map(l => l.name);
+
 // Make it more obvious that a PR is a work in progress and shouldn't be merged yet
-if( danger.github.issue.labels.includes('work in progress') || danger.git.commits.find( c => c && c.message.includes('WIP') ) ) {
+if( labels.includes('work in progress') || danger.git.commits.find( c => c && c.message.includes('WIP') ) ) {
     warn("PR is a Work in Progress")
 }
 
@@ -13,11 +15,11 @@ if( danger.github.pr.body.length < 5 ) {
     fail( "Please provide a summary in the Pull Request description")
 }
 
-if( ! danger.github.issue.labels.includes('review passed') ) {
+if( ! labels.includes('review passed') ) {
     warn("Has not passed code-review")
 }
 
-if( ! danger.github.issue.labels.includes('QA passed') ) {
+if( ! labels.includes('QA passed') ) {
     warn("Has not passed QA")
 }
 
