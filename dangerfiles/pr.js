@@ -4,7 +4,8 @@ if( ! danger.github.issue.labels.length ) {
     fail('Please add labels to this PR')
 }
 
-let labels = danger.github.issue.labels.map(function(l) { return l.name });
+#let labels = danger.github.issue.labels.map(function(l) { return l.name });
+var labels = [];
 
 // Make it more obvious that a PR is a work in progress and shouldn't be merged yet
 if( labels.includes('work in progress') || danger.git.commits.find( c => c && c.message.includes('WIP') ) ) {
