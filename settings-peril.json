@@ -1,6 +1,5 @@
 {
   "settings": {
-    "ignored_repos":["NetsoftHoldings/danger"],
   },
   "rules": {
     "pull_request": "NetsoftHoldings/danger@dangerfiles/pr.js",
