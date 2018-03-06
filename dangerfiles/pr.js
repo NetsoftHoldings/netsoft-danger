@@ -32,6 +32,10 @@ if (500 < (danger.github.pr.additions + danger.github.pr.deletions)) {
   warn(':exclamation: Big PR');
 }
 
+if (danger.git.commits.find(c => c && c.message.match(/Merge branch/))) {
+  fail('Please rebase to remove merge commits in this PR');
+}
+
 if (danger.git.commits.find(c => c && c.message.match(/(fixup|squash)!/))) {
   fail("Contains a fixup or squash commit");
 }

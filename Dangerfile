@@ -1,24 +1,3 @@
-fail "Please add labels to this PR" if github.pr_labels.empty?
-
-# Make it more obvious that a PR is a work in progress and shouldn't be merged yet
-if github.pr_labels.include?('work in progress') or git.commits.any?{|c| c.message.include?('WIP') }
-  warn("PR is a Work in Progress")
-end
-
-fail "Please provide a summary in the Pull Request description" if github.pr_body.length < 5
-
-warn("Has not passed code-review") unless github.pr_labels.include?('review passed')
-warn("Has not passed QA") unless github.pr_labels.include?('QA passed')
-
-warn "PR base is not set to master!" if github.branch_for_base != "master"
-
-# Warn when there is a big PR
-warn("Big PR") if git.lines_of_code > 500
-
-if git.commits.any? { |c| c.message =~ /^Merge branch 'master'/ }
-  fail 'Please rebase to removed merge commits in this PR'
-end
-
 # Don't let testing shortcuts get into master by accident
 if Dir.exists?('spec')
   fail("fdescribe left in tests") if `grep -r -e '\\bfdescribe\\b' spec/ |grep -v 'danger ok' `.length > 1
@@ -26,10 +5,6 @@ if Dir.exists?('spec')
   fail("fit left in tests") if `grep -r -e '\\bfit\\b' spec/ | grep -v 'danger ok' `.length > 1
   fail("ap left in tests") if `grep -r -e '\\bap\\b' spec/ | grep -v 'danger ok' `.length > 1
   fail("puts left in tests") if `grep -r -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
-end
-
-if git.commits.any? {|c| c.message =~ /(fixup|squash)!/ }
-  fail 'Contains a fixup or squash commit'
 end
 
 git.commits.each do |c|
