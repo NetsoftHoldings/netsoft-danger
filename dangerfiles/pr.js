@@ -11,7 +11,7 @@ if (labels.includes('work in progress') || danger.git.commits.find(c => c && c.m
   fail("PR is a Work in Progress");
 }
 
-if (danger.github.pr.body.length < 5) {
+if ((danger.github.pr.body || '').length < 5) {
   fail("Please provide a summary in the Pull Request description");
 }
 
