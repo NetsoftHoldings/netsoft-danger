@@ -30,9 +30,9 @@ git.commits.each do |c|
     fail '[migration] Migration commit with no migrations!' + short
   end
 
-  has_hubstaff_icon_changes = c.diff_parent.any? {|f| f.path =~ /hubstaff-icons/ }
+  has_hubstaff_icon_changes = c.diff_parent.any? {|f| f.path =~ /hubstaff(icons|font)/ || f.path =~ /fontcustom-manifest/ }
   if has_hubstaff_icon_changes
-    if c.diff_parent.any? {|f| !( f.path =~ /hubstaff-icons/) }
+    if c.diff_parent.any? {|f| !( f.path =~ /hubstaff-(icons|font)/ || f.path ~= /fontcustom-manifest/ ) }
       fail '[hubstaff-icons] Put hubstaff-icon changes into their own commit' + short
     end
   end
