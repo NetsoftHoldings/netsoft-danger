@@ -4,7 +4,7 @@ if Dir.exists?('spec')
   fail("fcontext left in tests") if `grep -r -e '\\bfcontext\\b' spec/ |grep -v 'danger ok' `.length > 1
   fail("fit left in tests") if `grep -r -e '\\bfit\\b' spec/ | grep -v 'danger ok' `.length > 1
   fail("ap left in tests") if `grep -r -e '\\bap\\b' spec/ | grep -v 'danger ok' `.length > 1
-  fail("puts left in tests") if `grep -r -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
+  fail("puts left in tests") if `grep -r -e '\\b[p]uts\\b' spec/ | grep -v 'danger ok' `.length > 1
 end
 
 git.commits.each do |c|
