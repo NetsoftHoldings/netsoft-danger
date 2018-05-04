@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'fileutils'
+
+class NetsoftCircle < Thor
+  desc 'setup', 'Setup Heroku for deployment'
+  def setup
+
+    File.open("#{ENV['HOME']}/.netrc", 'a+') do |file|
+      file << <<-EOF
+
+machine api.heroku.com
+  login #{ENV['HEROKU_LOGIN']}
+  password #{ENV['HEROKU_API_KEY']}
+machine git.heroku.com
+  login #{ENV['HEROKU_LOGIN']}
+  password #{ENV['HEROKU_API_KEY']}
+EOF
+    end
+
+    Dir.mkdir("#{ENV['HOME']}/.ssh") unless Dir.exists?("#{ENV['HOME']}/.ssh")
+    File.open("#{ENV['HOME']}/.ssh/config", 'a+') do |file|
+      file << <<-EOF
+
+VerifyHostKeyDNS yes
+StrictHostKeyChecking no
+EOF
+    end
+
+    system('git config --global url."https://git.heroku.com/".insteadOf heroku:')
+  end
+
+  desc 'merge', 'Merges several simplecov json result files'
+  option :output, type: :string, aliases: '-o', desc: 'Specify an alternate output directory for the produced coverage data'
+  def merge(*files)
+    require 'simplecov'
+    return if files.empty?
+    results = []
+
+    files.each do |file|
+      json = JSON.parse(File.read(file))
+      json.each do |command_name, data|
+        result = SimpleCov::Result.from_hash(command_name => data)
+        results << result
+      end
+    end
+
+    merged_result = SimpleCov::ResultMerger.merge_results(*results)
+    SimpleCov.coverage_dir options[:output] unless options[:output].nil?
+    SimpleCov::Formatter::HTMLFormatter.new.format(merged_result)
+  end
+end
+
+NetsoftCircle.start
