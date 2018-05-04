@@ -56,8 +56,23 @@ git.commits.each do |c|
   end
 end
 
-if ci_report_links = ENV['CI_REPORT_LINKS']
-  JSON.parse(ci_report_links).each do |msg, links|
+if ENV['CIRCLECI']
+  require 'open-uri'
+
+  artifact_url = "https://circleci.com/api/v1.1/project/github/#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV["CIRCLE_PROJECT_REPONAME"]}/#{ENV['CIRCLE_BUILD_NUM']}/artifacts?circle-token=#{ENV['CIRCLE_TOKEN']}"
+  artifacts = JSON.load(open(artifact_url).read).map{|a| a["url"]}
+
+  jest = artifacts.find{ |artifact| artifact.end_with?('jest/index.html') }
+  coverage = artifacts.find{ |artifact| artifact.end_with?('coverage/index.html') }
+  rspec_files = artifacts.select{ |artifact| artifact =~ /rspec-(\d+)\.html$/ }
+  teaspoon = artifacts.find{ |artifact| artifact.end_with?('teaspoon.html') }
+
+  {}.tap do |hash|
+    hash['Ruby coverage report'] = coverage if coverage
+    hash['RSpec test report'] = rspec_files unless rspec_files.empty?
+    hash['Jest coverage report'] = jest if jest
+    hash['Teaspoon test report'] = jest if teaspoon
+  end.each do |msg, links|
     links = [*links]
     if links.size == 1
       message("[#{msg}](#{links[0]})")
