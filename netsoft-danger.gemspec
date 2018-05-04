@@ -10,10 +10,12 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/NetsoftHoldings/danger'
   s.summary     = 'Danger.systems conventions for Netsoft projects.'
   s.description = 'Packages a Dangerfile to be used with Danger.'
+  s.executables << 'netsoft-circle'
 
   s.files         = `git ls-files`.split("\n")
   s.require_paths = ['lib']
 
   s.add_development_dependency 'rake'
   s.add_runtime_dependency 'danger', '~> 5.0'
+  s.add_runtime_dependency 'thor'
 end
