@@ -56,7 +56,7 @@ git.commits.each do |c|
   end
 end
 
-if ENV['CIRCLECI']
+if ENV['CIRCLE_VERSION'] == '2.0'
   require 'open-uri'
 
   artifact_url = "https://circleci.com/api/v1.1/project/github/#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV["CIRCLE_PROJECT_REPONAME"]}/#{ENV['CIRCLE_BUILD_NUM']}/artifacts?circle-token=#{ENV['CIRCLE_TOKEN']}"
