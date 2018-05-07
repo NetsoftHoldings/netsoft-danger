@@ -2,6 +2,9 @@
 
 require 'thor'
 require 'fileutils'
+require 'net/http'
+require 'json'
+require 'uri'
 
 class NetsoftCircle < Thor
   desc 'setup', 'Setup Heroku for deployment'
@@ -49,6 +52,37 @@ EOF
     merged_result = SimpleCov::ResultMerger.merge_results(*results)
     SimpleCov.coverage_dir options[:output] unless options[:output].nil?
     SimpleCov::Formatter::HTMLFormatter.new.format(merged_result)
+  end
+
+  desc 'rspec', 'Run rspec'
+  def rspec
+    system <<-EOF
+      bundle _${BUNDLE_VERSION}_ exec rspec \
+        --color \
+        --format RspecJunitFormatter \
+        --out $CIRCLE_TEST_REPORTS/rspec/junit.xml \
+        --format html \
+        --out $CIRCLE_ARTIFACTS/rspec.html \
+        --format progress \
+        $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+    EOF
+  end
+
+  desc 'auto_cancel', 'Auto-cancel redundant builds'
+  def auto_cancel
+    circle_url = "https://circleci.com/api/v1.1/project/github/#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV["CIRCLE_PROJECT_REPONAME"]}"
+    builds_url = "#{circle_url}/tree/#{ENV['CIRCLE_BRANCH']}?circle-token=#{ENV['CIRCLE_TOKEN']}"
+    build_nums = JSON.load(open(builds_url).read)
+                      .select{|a| a['status'] == 'running' && a['build_num'] != ENV['CIRCLE_BUILD_NUM'] }
+                      .map{ |build| build['build_num'] }
+
+    build_nums.each do |build_num|
+      uri = URI("#{circle_url}/#{build_num}/cancel")
+      https.use_ssl = true
+      req = Net::HTTP::Post.new(uri.path)
+      req['circle-token'] = ENV['CIRCLE_TOKEN']
+      https.request(req)
+    end
   end
 end
 
