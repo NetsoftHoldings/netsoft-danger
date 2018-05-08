@@ -50,6 +50,20 @@ EOF
     SimpleCov.coverage_dir options[:output] unless options[:output].nil?
     SimpleCov::Formatter::HTMLFormatter.new.format(merged_result)
   end
+
+  desc 'rspec', 'Run rspec'
+  def rspec
+    system <<-EOF
+      bundle _${BUNDLE_VERSION}_ exec rspec \
+        --color \
+        --format RspecJunitFormatter \
+        --out $CIRCLE_TEST_REPORTS/rspec/junit.xml \
+        --format html \
+        --out $CIRCLE_ARTIFACTS/rspec.html \
+        --format progress \
+        $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+    EOF
+  end
 end
 
 NetsoftCircle.start
