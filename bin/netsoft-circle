@@ -29,6 +29,7 @@ EOF
     end
 
     system('git config --global url."https://git.heroku.com/".insteadOf heroku:')
+    exit(1) unless $?.success?
   end
 
   desc 'merge', 'Merges several simplecov json result files'
@@ -63,6 +64,11 @@ EOF
         --format progress \
         $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
     EOF
+    exit(1) unless $?.success?
+  end
+
+  def self.exit_on_failure?
+    true
   end
 end
 
