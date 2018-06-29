@@ -58,7 +58,7 @@ EOF
       bundle _${BUNDLE_VERSION}_ exec rspec \
         --color \
         --format RspecJunitFormatter \
-        --out $CIRCLE_TEST_REPORTS/rspec/junit.xml \
+        --out $CIRCLE_TEST_REPORTS/rspec/junit-$CIRCLE_NODE_INDEX.xml \
         --format html \
         --out $CIRCLE_ARTIFACTS/rspec.html \
         --format progress \
