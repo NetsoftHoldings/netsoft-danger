@@ -7,6 +7,18 @@ if Dir.exists?('spec')
   fail("puts left in tests") if `grep -r -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
 end
 
+if File.exists?('Gemfile')
+  if `grep -r -e "^ *gem 'hubstaff_[a-z]\\+" Gemfile | grep -e ",.\\+[a-zA-Z]" `.length > 1
+    fail("[gemfile] Beta hubstaff_* gems are not allowed in master/production")
+  end
+  if `grep -r -e "^ *gem 'hubstaff_[a-z]\\+" Gemfile | grep -e ",.\\+'[~>=]\\+.\\+[a-zA-Z]" `.length > 1
+    fail("[gemfile] Beta hubstaff_* gems should be the exact version")
+  end
+  if `grep -r -e "^ *gem 'hubstaff_[a-z]\\+" Gemfile | grep -e ",.\\+[' ][0-9.]\\+'" | grep -v '~>' `.length > 1
+    fail("[gemfile] Release hubstaff_* gems should be using a ~> version")
+  end
+end
+
 git.commits.each do |c|
   short = " ( #{c.sha[0..7]} )"
   has_migrations = c.diff_parent.any? {|f| f.path =~ /db\/migrate\// }
@@ -49,16 +61,6 @@ git.commits.each do |c|
     if c.diff_parent.any? {|f| f.path == 'Gemfile.lock' }
       unless `grep -e '^   1.15.2$' Gemfile.lock`.length > 1
         fail("[gemfile] Gemfile not bundled with bundler 1.15.2")
-      end
-    end
-    if c.diff_parent.any? { |f| f.path == 'Gemfile' }
-      if `egrep "'hubstaff_[a-z',[:space:]]+'[[:space:]0-9\.]+[a-z]+" -o Gemfile`.length > 1
-        fail("[gemfile] Beta versions of gems are not allowed in master/production")
-      end
-    end
-    if c.diff_parent.any? { |f| f.path == 'Gemfile' }
-      if `egrep "'hubstaff_[a-z',[:space:]]+[~>=]+[[:space:]0-9\.]+[a-z]+" -o Gemfile`.length > 1
-        fail("[gemfile] Beta gems should be the exact version")
       end
     end
   elsif has_gemfile_msg
