@@ -51,6 +51,16 @@ git.commits.each do |c|
         fail("[gemfile] Gemfile not bundled with bundler 1.15.2")
       end
     end
+    if c.diff_parent.any? { |f| f.path == 'Gemfile' }
+      if `egrep "'hubstaff_[a-z',[:space:]]+'[[:space:]0-9\.]+[a-z]+" -o Gemfile`.length > 1
+        fail("[gemfile] Beta versions of gems are not allowed in master/production")
+      end
+    end
+    if c.diff_parent.any? { |f| f.path == 'Gemfile' }
+      if `egrep "'hubstaff_[a-z',[:space:]]+[~>=]+[[:space:]0-9\.]+[a-z]+" -o Gemfile`.length > 1
+        fail("[gemfile] Beta gems should be the exact version")
+      end
+    end
   elsif has_gemfile_msg
     fail '[gemfile] Gemfile commit has no gemfile changes!' + short
   end
