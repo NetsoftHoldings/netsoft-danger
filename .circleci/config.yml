@@ -38,6 +38,7 @@ workflows:
           context: org-global
       - "Build":
           <<: *filter_test
+          context: org-global
           requires:
             - "Checkout"
   build_test_beta:
@@ -47,6 +48,7 @@ workflows:
           context: org-global
       - "Build":
           <<: *filter_beta
+          context: org-global
           requires:
             - "Checkout"
       - "Publish":
@@ -61,6 +63,7 @@ workflows:
           context: org-global
       - "Build":
           <<: *filter_release
+          context: org-global
           requires:
             - "Checkout"
       - "Publish":
