@@ -40,3 +40,10 @@ if (danger.git.commits.find(c => c && c.message.match(/(fixup|squash)!/))) {
   fail("Contains a fixup or squash commit");
 }
 
+if (!danger.github.pr.milestone) {
+  fail('Requires a milestone before merging!');
+} else {
+  // we can do additional checks on the milestone name if we want.
+  // e.g. inspect milestone.title or milestone.description
+}
+
