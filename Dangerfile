@@ -76,7 +76,7 @@ if ENV['CIRCLE_VERSION'] == '2.0'
 
   jest = artifacts.find{ |artifact| artifact.end_with?('jest/index.html') }
   coverage = artifacts.find{ |artifact| artifact.end_with?('coverage/index.html') }
-  rspec_files = artifacts.select{ |artifact| artifact =~ /rspec-(\d+)\.html$/ }
+  rspec_files = artifacts.select{ |artifact| artifact =~ /rspec-(.+)\.html$/ }
   teaspoon = artifacts.find{ |artifact| artifact.end_with?('teaspoon.html') }
 
   {}.tap do |hash|
@@ -89,7 +89,17 @@ if ENV['CIRCLE_VERSION'] == '2.0'
     if links.size == 1
       message("[#{msg}](#{links[0]})")
     else
-      message("#{msg} - #{links.map{|l| "[link](#{l})"}.join(', ')}")
+      r         = /rspec-(.+)\.html$/
+      the_links = links.map do |l|
+        m = r.match(l)
+        if m
+          "[#{m[1]}](#{l})"
+        else
+          "[link](#{l})"
+        end
+      end.join(', ')
+
+      message("#{msg} - #{the_links}")
     end
   end
 else
