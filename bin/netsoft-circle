@@ -67,6 +67,17 @@ EOF
     exit(1) unless $?.success?
   end
 
+  desc 'rubocop', 'Run rubocop'
+  def rubocop
+    system <<-EOF
+      bundle _${BUNDLE_VERSION}_ exec rubocop \
+        --format progress \
+        --format html \
+        --out $CIRCLE_ARTIFACTS/rubocop/report.html
+    EOF
+    exit(1) unless $?.success?
+  end
+
   def self.exit_on_failure?
     true
   end
