@@ -1,0 +1,46 @@
+require:
+  - netsoft-danger
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.4
+  TargetRailsVersion: 5.2
+  DisplayStyleGuide: true
+  StyleGuideBaseURL: https://rubystyle.guide
+  Exclude:
+    - 'db/**/*'
+    - 'coverage/**/*'
+    - 'log/**/*'
+    - 'public/**/*'
+    - 'tmp/**/*'
+    - 'spec/dummy/**/*'
+Rails:
+  Enabled: true
+Rails/HttpPositionalArguments:
+  Enabled: false
+Netsoft/AuthHttpPositionalArguments:
+  Enabled: true
+  Include:
+    - 'spec/controllers/**/*'
+RSpec/NotToNot:
+  EnforcedStyle: to_not
+RSpec/ExpectChange:
+  EnforcedStyle: block
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyle: no_space
+  SpaceBeforeBlockParameters: false
+Layout/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+Layout/IndentFirstHashElement:
+  IndentationWidth: 4
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+Layout/IndentAssignment:
+  IndentationWidth: 4
