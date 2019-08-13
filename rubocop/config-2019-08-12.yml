@@ -16,6 +16,7 @@ AllCops:
     - 'public/**/*'
     - 'tmp/**/*'
     - 'spec/dummy/**/*'
+    - 'vendor/**/*'
 
 Naming/RescuedExceptionsVariableName:
   PreferredName: ex
@@ -89,3 +90,6 @@ Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
+
+Metrics:
+  Enabled: false
