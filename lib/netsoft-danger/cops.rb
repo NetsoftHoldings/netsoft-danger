@@ -1,1 +1,0 @@
-require_relative 'cops/netsoft/auth_http_positional_arguments'

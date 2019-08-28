@@ -70,7 +70,7 @@ EOF
   desc 'rubocop', 'Run rubocop'
   def rubocop
     system <<-EOF
-      rubocop \
+      bundle _${BUNDLE_VERSION}_ exec rubocop \
         --parallel \
         --format progress \
         --format html \
