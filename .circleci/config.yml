@@ -124,7 +124,9 @@ jobs:
           name: Deploy to gem server
           command: |-
             ./bin/tag_check.sh
+            ./bin/setup-rubygems.sh
             rm -rf pkg
             gem install geminabox
             rake build
             gem inabox -g ${HUBSTAFF_GEM_SERVER} pkg/*
+            gem push pkg/*.gem
