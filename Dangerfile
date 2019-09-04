@@ -66,6 +66,19 @@ git.commits.each do |c|
   elsif has_gemfile_msg
     fail '[gemfile] Gemfile commit has no gemfile changes!' + short
   end
+
+  has_package_changes = c.diff_parent.any? {|f| f.path =~ /package\.json|yarn\.lock/ }
+  has_package_msg = c.message =~ /\A\[package\.json\]/
+  if has_package_changes
+    unless has_package_msg
+      fail '[package.json] Package.json commits need to be prefixed with [package.json] ' + short
+    end
+    if c.diff_parent.any? {|f| !( f.path =~ /package\.json|yarn\.lock/ ) }
+      fail '[package.json] Package.json commit contains non-package changes' + short
+    end
+  elsif has_package_msg
+    fail '[package.json] Pacakge.json commit has no package changes!' + short
+  end
 end
 
 require 'open-uri'
