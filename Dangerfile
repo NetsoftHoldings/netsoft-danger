@@ -23,7 +23,7 @@ git.commits.each do |c|
   short = " ( #{c.sha[0..7]} )"
   has_migrations = c.diff_parent.any? {|f| f.path =~ /db\/migrate\// }
   has_schema_changes = c.diff_parent.any? {|f| f.path =~ /db\/schema\.rb/ }
-  has_migration_msg = c.message =~ /^\[migration\]/
+  has_migration_msg = c.message =~ /\A\[migration\]/
   no_schema_ok = ENV['DANGER_NO_SCHEMA_OK'] || false
   if has_migrations || has_schema_changes
     unless has_migration_msg
@@ -35,27 +35,27 @@ git.commits.each do |c|
     if !has_migrations && has_schema_changes
       warn '[migration] Please checkin your migrations with your schema.rb changes' + short
     end
-    if c.diff_parent.any? {|f| !( f.path =~ /db\/migrate\// or f.path =~ /db\/schema.rb/ ) }
+    if c.diff_parent.any? {|f| !( f.path =~ /db\/migrate\/|db\/schema\.rb/ ) }
       fail '[migration] Migration commit contains non-migration changes' + short
     end
   elsif has_migration_msg
     fail '[migration] Migration commit with no migrations!' + short
   end
 
-  has_hubstaff_icon_changes = c.diff_parent.any? {|f| f.path =~ /hubstaff(icons|font)/ || f.path =~ /fontcustom-manifest/ }
+  has_hubstaff_icon_changes = c.diff_parent.any? {|f| f.path =~ /hubstaff(icons|font)|fontcustom-manifest/ }
   if has_hubstaff_icon_changes
     if c.diff_parent.any? {|f| !( f.path =~ /hubstaff-(icons|font)/ || f.path =~ /fontcustom-manifest/ ) }
       fail '[hubstaff-icons] Put hubstaff-icon changes into their own commit' + short
     end
   end
 
-  has_gemfile_changes = c.diff_parent.any? {|f| f.path =~ /Gemfile/ || f.path =~ /gemspec/ }
-  has_gemfile_msg = c.message =~ /^\[gemfile\]/
+  has_gemfile_changes = c.diff_parent.any? {|f| f.path =~ /Gemfile|gemspec/ }
+  has_gemfile_msg = c.message =~ /\A\[gemfile\]/
   if has_gemfile_changes
     unless has_gemfile_msg
       fail '[gemfile] Gemfile commits need to be prefixed with [gemfile] ' + short
     end
-    if c.diff_parent.any? {|f| !( f.path =~ /Gemfile/ || f.path =~ /gemspec/ ) }
+    if c.diff_parent.any? {|f| !( f.path =~ /Gemfile|gemspec/ ) }
       fail '[gemfile] Gemfile commit contains non-gemfile changes' + short
     end
     if c.diff_parent.any? {|f| f.path == 'Gemfile.lock' }
