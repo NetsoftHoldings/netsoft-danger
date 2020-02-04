@@ -59,8 +59,8 @@ git.commits.each do |c|
       fail '[gemfile] Gemfile commit contains non-gemfile changes' + short
     end
     if c.diff_parent.any? {|f| f.path == 'Gemfile.lock' }
-      unless `grep -e '^   1.15.2$' Gemfile.lock`.length > 1
-        fail("[gemfile] Gemfile not bundled with bundler 1.15.2")
+      unless `grep -E -- '^BUNDLED WITH\s*\n\s+(1\\.15\\.2|1\\.17\\.3)$' Gemfile.lock`.length > 1
+        fail("[gemfile] Gemfile not bundled with bundler 1.15.2 or 1.17.3")
       end
     end
   elsif has_gemfile_msg
