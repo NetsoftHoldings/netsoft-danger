@@ -15,8 +15,9 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split("\n")
   s.require_paths = ['lib']
 
-  s.add_development_dependency 'rake'
   s.add_runtime_dependency 'danger', '~> 5.0'
   s.add_runtime_dependency 'thor'
-  s.add_runtime_dependency 'faraday', '~> 0.15.0'
+  s.add_runtime_dependency 'faraday'
+
+  s.add_development_dependency 'rake'
 end
