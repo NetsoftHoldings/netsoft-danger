@@ -1,0 +1,15 @@
+inherit_gem:
+  netsoft-rubocop:
+    - default.yml
+
+Style/SignalException:
+  Exclude:
+    - Dangerfile
+
+Style/IfUnlessModifier:
+  Exclude:
+    - Dangerfile
+
+Layout/EmptyLineAfterGuardClause:
+  Exclude:
+    - Dangerfile
