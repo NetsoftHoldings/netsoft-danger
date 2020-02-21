@@ -112,6 +112,10 @@ jobs:
           command: |-
             gem build *.gemspec
       - run:
+          name: Run rubocop
+          command: |-
+            bundle exec rubocop
+      - run:
           name: Run Danger
           command: |-
             bundle exec danger
