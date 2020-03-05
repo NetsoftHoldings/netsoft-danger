@@ -3,6 +3,7 @@
 
 require 'thor'
 require 'fileutils'
+require 'English'
 
 class NetsoftCircle < Thor # :nodoc:
   desc 'setup', 'Setup Heroku for deployment'
