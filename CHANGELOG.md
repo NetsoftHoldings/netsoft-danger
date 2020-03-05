@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.3.7]
+### Fixed
+- require English in the netsoft-circle bin
+
 ## [0.3.6]
 ### Added
 - rubocop checks for this gem
