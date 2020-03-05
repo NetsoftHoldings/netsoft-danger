@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.3.6]
+### Added
+- rubocop checks for this gem
+### Changed
+- allow bundler 1.17.3
+
 ## [0.3.5]
 ### Added
 - package.json checks
