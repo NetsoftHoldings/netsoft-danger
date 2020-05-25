@@ -81,6 +81,28 @@ class NetsoftCircle < Thor # :nodoc:
     exit(1) unless $CHILD_STATUS.success?
   end
 
+  desc 'docs', 'Build and deploy docs'
+  method_option :branch, default: 'master', banner: '<docs branch name>', desc: 'The branch to fetch the docs repo from.'
+  def docs
+    system <<~SCRIPT
+      #!/bin/bash
+      git clone -b #{branch} https://$GITHUB_AUTH_TOKEN@github.com/NetsoftHoldings/hubstaff-docs.git ~/hubstaff-docs
+      [ "$?" -eq "0" ] && exit 1
+      docker run -u $(id -u) \
+                 --env GIT_CREDENTIALS=https://$GITHUB_AUTH_TOKEN@github.com \
+                 -v ~/hubstaff-docs:/antora:Z \
+                 --rm -t antora/antora \
+                 site.yml
+      [ ! -d ~/hubstaff-docs/build/site ] && exit 1
+      docker run --env AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
+                 --env AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+                 --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+                -v ~/hubstaff-docs/build/site:/docs \
+                --rm -t \
+                amazon/aws-cli s3 sync /docs s3://$AWS_S3_BUCKET --delete
+    SCRIPT
+  end
+
   def self.exit_on_failure?
     true
   end
