@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Next]
 ### Added
 - auto add/remove some labels
+- allow conventional commit format for our migration, gemfile, and package.json
 ### Changed
 ### Fixed
 
