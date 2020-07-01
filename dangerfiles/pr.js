@@ -15,8 +15,12 @@ if ((danger.github.pr.body || '').length < 5) {
   fail("Please provide a summary in the Pull Request description");
 }
 
-if (!labels.includes('review passed')) {
-  fail("Has not passed code-review");
+if (labels.includes('product review needed')) {
+  fail('Has not passed product review');
+}
+
+if (!(labels.includes('review passed') || labels.includes('code review passed'))) {
+  fail("Has not passed code review");
 }
 
 if (!labels.includes('QA passed')) {
