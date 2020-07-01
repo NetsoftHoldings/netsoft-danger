@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - auto add/remove some labels
 - allow conventional commit format for our migration, gemfile, and package.json
+- add support for product review labels
+- add support for renamed code review labels
 ### Changed
 ### Fixed
 
