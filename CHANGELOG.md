@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Next]
 ### Added
 - auto add/remove some labels
+- add support for product review labels
 ### Changed
+- added support for renamed code review labels
 ### Fixed
 
 ## [0.3.7]
