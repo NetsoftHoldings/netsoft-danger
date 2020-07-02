@@ -4,7 +4,7 @@ def toggle_label(github, label, should_set)
   repo_name = github.pr_json['head']['repo']['full_name']
   pr_number = github.pr_json['number']
   has_label = github.pr_labels.include?(label)
-  puts repo_name: repo_name, pr_number: pr_number, labels: github.pr_labels, has_label: has_label, label: label, should_set: should_set
+
   if should_set && !has_label
     github.api.add_labels_to_an_issue(repo_name, pr_number, [label])
   elsif !should_set && has_label
