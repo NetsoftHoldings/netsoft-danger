@@ -4,8 +4,9 @@ def toggle_label(github, label, should_set)
   repo_name = github.pr_json['head']['repo']['full_name']
   pr_number = github.pr_json['number']
   has_label = github.pr_labels.include?(label)
+  puts repo_name: repo_name, pr_number: pr_number, labels: github.pr_labels, has_label: has_label, label: label, should_set: should_set
   if should_set && !has_label
-    github.api.add_labels_to_an_issue(repo_name, pr_number, label)
+    github.api.add_labels_to_an_issue(repo_name, pr_number, [label])
   elsif !should_set && has_label
     github.api.remove_label(repo_name, pr_number, label)
   end
@@ -36,6 +37,8 @@ if github.branch_for_head.start_with?('security')
   toggle_label(github, 'security', true)
 end
 
+should_have_migration_label = false
+
 git.commits.each do |c|
   short              = " ( #{c.sha[0..7]} )"
   has_migrations     = c.diff_parent.any? { |f| f.path =~ %r{db/migrate/} }
@@ -60,11 +63,9 @@ git.commits.each do |c|
       fail 'migration: Migration commit contains non-migration changes' + short
     end
 
-    toggle_label(github, 'run migration', true)
+    should_have_migration_label = true
   elsif has_migration_msg
     fail '[migration] Migration commit with no migrations!' + short
-  else
-    toggle_label(github, 'run migration', false)
   end
 
   has_hubstaff_icon_changes = c.diff_parent.any? { |f| f.path =~ /hubstaff(icons|font)|fontcustom-manifest/ }
@@ -113,6 +114,8 @@ git.commits.each do |c|
     fail 'package: Pacakge.json commit has no package changes!' + short
   end
 end
+
+toggle_label(github, 'run migration', should_have_migration_label)
 
 if ENV['CIRCLE_TOKEN']
   require 'open-uri'
