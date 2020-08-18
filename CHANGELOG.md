@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.4.0]
+### Fixed
+- correct simplecov merge on newer simplecov release
+
 ## [0.3.9]
 ### Fixed
 - correct API call to github for adding labels and fix logic in determining if we should or should not add the label
