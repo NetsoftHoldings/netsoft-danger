@@ -45,7 +45,7 @@ class NetsoftCircle < Thor # :nodoc:
       json = JSON.parse(File.read(file))
       json.each do |command_name, data|
         result = SimpleCov::Result.from_hash(command_name => data)
-        results << result
+        results.concat [*result]
       end
     end
 
