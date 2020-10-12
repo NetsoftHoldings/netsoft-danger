@@ -28,7 +28,7 @@ if (!labels.includes('QA passed')) {
 }
 
 if (!danger.github.pr.base.ref.includes('master')) {
-  warn("PR base is not set to master!");
+  fail("PR base is not set to master!");
 }
 
 // Warn when there is a big PR

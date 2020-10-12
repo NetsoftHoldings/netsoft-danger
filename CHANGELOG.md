@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.4.1]
 ### Changed
 - exclude binary files in the grep calls
+- make PR base ~= master a hard error
 
 ## [0.4.0]
 ### Fixed
