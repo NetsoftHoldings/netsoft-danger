@@ -14,11 +14,11 @@ end
 
 # Don't let testing shortcuts get into master by accident
 if Dir.exist?('spec')
-  fail('fdescribe left in tests') if `grep -r -e '\\bfdescribe\\b' spec/ |grep -v 'danger ok' `.length > 1
-  fail('fcontext left in tests') if `grep -r -e '\\bfcontext\\b' spec/ |grep -v 'danger ok' `.length > 1
-  fail('fit left in tests') if `grep -r -e '\\bfit\\b' spec/ | grep -v 'danger ok' `.length > 1
-  fail('ap left in tests') if `grep -r -e '\\bap\\b' spec/ | grep -v 'danger ok' `.length > 1
-  fail('puts left in tests') if `grep -r -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
+  fail('fdescribe left in tests') if `grep -r -I -e '\\bfdescribe\\b' spec/ |grep -v 'danger ok' `.length > 1
+  fail('fcontext left in tests') if `grep -r -I -e '\\bfcontext\\b' spec/ |grep -v 'danger ok' `.length > 1
+  fail('fit left in tests') if `grep -r -I -e '\\bfit\\b' spec/ | grep -v 'danger ok' `.length > 1
+  fail('ap left in tests') if `grep -r -I -e '\\bap\\b' spec/ | grep -v 'danger ok' `.length > 1
+  fail('puts left in tests') if `grep -r -I -e '\\bputs\\b' spec/ | grep -v 'danger ok' `.length > 1
 end
 
 if File.exist?('Gemfile')
