@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Next]
 ### Added
 ### Changed
-- exclude binary files in the grep calls
 ### Fixed
+
+## [0.4.1]
+### Changed
+- exclude binary files in the grep calls
 
 ## [0.4.0]
 ### Fixed
