@@ -3,11 +3,11 @@ version: 2
 defaults: &defaults
   docker: &ruby_image
     - &ruby_image
-      image: circleci/ruby:2.4.4-stretch
+      image: circleci/ruby:2.5.5-stretch
       environment:
         RUBYOPT: '-KU -E utf-8:utf-8'
         BUNDLE_PATH: vendor/bundle
-        BUNDLE_VERSION: 1.15.2
+        BUNDLE_VERSION: 1.17.3
         BUNDLE_JOBS: 4
         BUNDLE_RETRY: 3
 
@@ -82,7 +82,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - netsoft-danger-bundle-v2-{{ checksum "Gemfile" }}-{{ checksum "netsoft-danger.gemspec" }}
+            - netsoft-danger-bundle-v3-{{ checksum "Gemfile" }}-{{ checksum "netsoft-danger.gemspec" }}
       - run:
           name: Install bundler
           command: gem install bundler --version=$BUNDLE_VERSION
@@ -91,7 +91,7 @@ jobs:
           command: |-
             bundle _${BUNDLE_VERSION}_ check || bundle _${BUNDLE_VERSION}_ install --retry=$BUNDLE_RETRY
       - save_cache:
-          key: netsoft-danger-bundle-v2-{{ checksum "Gemfile" }}-{{ checksum "netsoft-danger.gemspec" }}
+          key: netsoft-danger-bundle-v3-{{ checksum "Gemfile" }}-{{ checksum "netsoft-danger.gemspec" }}
           paths:
             - vendor/bundle
             - Gemfile.lock
