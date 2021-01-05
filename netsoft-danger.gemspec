@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'danger', '~> 5.0'
   s.add_runtime_dependency 'faraday'
+  s.add_runtime_dependency 'simplecov', '~> 0.20.0'
   s.add_runtime_dependency 'thor'
 
   s.add_development_dependency 'rake'
