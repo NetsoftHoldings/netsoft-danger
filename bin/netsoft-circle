@@ -34,7 +34,9 @@ class NetsoftCircle < Thor # :nodoc:
   end
 
   desc 'merge', 'Merges several simplecov json result files'
-  option :output, type: :string, aliases: '-o', desc: 'Specify an alternate output directory for the produced coverage data'
+  option :output, type: :string, aliases: '-o',
+         desc:          'Specify an alternate output directory for the produced coverage data'
+
   def merge(*files)
     require 'simplecov'
     return if files.empty?
