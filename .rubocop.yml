@@ -1,6 +1,9 @@
 inherit_gem:
   netsoft-rubocop:
-    - default.yml
+    - config/default.yml
+
+AllCops:
+  TargetRubyVersion: 2.4
 
 Style/SignalException:
   Exclude:
@@ -10,6 +13,19 @@ Style/IfUnlessModifier:
   Exclude:
     - Dangerfile
 
+Style/SoleNestedConditional:
+  Exclude:
+    - Dangerfile
+
 Layout/EmptyLineAfterGuardClause:
   Exclude:
     - Dangerfile
+
+Layout/LineLength:
+  Exclude:
+    - Dangerfile
+
+Performance/StringInclude:
+  Exclude:
+    - Dangerfile
+
