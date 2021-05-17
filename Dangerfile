@@ -43,15 +43,11 @@ git.commits.each do |c|
   short              = " ( #{c.sha[0..7]} )"
   has_migrations     = c.diff_parent.any? { |f| f.path =~ %r{db/migrate/} }
   has_schema_changes = c.diff_parent.any? { |f| f.path =~ %r{db/schema\.rb} }
-  old_migration_msg  = c.message.start_with?('[migration]')
-  has_migration_msg  = old_migration_msg || c.message.match?(/\Amigration(\([A-Za-z]+\))?:/)
+  has_migration_msg  = c.message.match?(/\Amigration(\([A-Za-z]+\))?:/)
   no_schema_ok       = ENV['DANGER_NO_SCHEMA_OK'] || false
   if has_migrations || has_schema_changes
     unless has_migration_msg
       fail 'migration: Schema migration commits needs to be tagged with (migration). e.g. migration(Module): ' + short
-    end
-    if old_migration_msg
-      warn 'migration: Please switch to the new conventional commit format.'
     end
     if has_migrations && !has_schema_changes && !no_schema_ok
       fail 'migration: Please checkin your schema.rb changes with your migration' + short
@@ -76,14 +72,10 @@ git.commits.each do |c|
   end
 
   has_gemfile_changes = c.diff_parent.any? { |f| f.path =~ /Gemfile|gemspec/ }
-  old_gemfile_msg     = c.message.start_with?('[gemfile]')
-  has_gemfile_msg     = old_gemfile_msg || c.message.match?(/\Agemfile(\([A-Za-z]+\))?:/)
+  has_gemfile_msg     = c.message.match?(/\Agemfile(\([A-Za-z]+\))?:/)
   if has_gemfile_changes
     unless has_gemfile_msg
       fail 'gemfile: Gemfile commits needs to be tagged with (gemfile). e.g. gemfile(Module): ' + short
-    end
-    if old_migration_msg
-      warn 'gemfile: Please switch to the new conventional commit format.'
     end
     if c.diff_parent.any? { |f| f.path !~ /Gemfile|gemspec/ }
       fail 'gemfile: Gemfile commit contains non-gemfile changes' + short
@@ -98,14 +90,10 @@ git.commits.each do |c|
   end
 
   has_package_changes = c.diff_parent.any? { |f| f.path =~ /package\.json|yarn\.lock/ }
-  old_package_msg     = c.message.start_with?('[package.json]')
-  has_package_msg     = old_package_msg || c.message.match?(/\Apackage(\([A-Za-z]+\))?:/)
+  has_package_msg     = c.message.match?(/\Apackage(\([A-Za-z]+\))?:/)
   if has_package_changes
     unless has_package_msg
       fail 'package: Package.json commits needs to be tagged with package. e.g package(Module): ' + short
-    end
-    if old_package_msg
-      warn 'package: Please switch to the new conventional commit format.'
     end
     if c.diff_parent.any? { |f| f.path !~ /package\.json|yarn\.lock/ }
       fail 'package: Package.json commit contains non-package changes' + short
