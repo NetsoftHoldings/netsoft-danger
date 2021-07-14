@@ -83,6 +83,15 @@ class NetsoftCircle < Thor # :nodoc:
     exit(1) unless $CHILD_STATUS.success?
   end
 
+  desc 'brakeman', 'Run brakeman'
+  def brakeman
+    system <<~COMMAND
+      bundle _${BUNDLE_VERSION}_ exec brakeman \
+        -o $CIRCLE_ARTIFACTS/brakeman/report.html
+    COMMAND
+    exit(1) unless $CHILD_STATUS.success?
+  end
+
   def self.exit_on_failure?
     true
   end
