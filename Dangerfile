@@ -115,6 +115,7 @@ if ENV['CIRCLE_TOKEN']
   coverage    = artifacts.find { |artifact| artifact.end_with?('coverage/index.html') }
   rubocop     = artifacts.find { |artifact| artifact.end_with?('rubocop/report.html') }
   eslint      = artifacts.find { |artifact| artifact.end_with?('eslint/report.html') }
+  brakeman    = artifacts.find { |artifact| artifact.end_with?('brakeman/report.html') }
   rspec_files = artifacts.select { |artifact| artifact =~ /rspec-(.+)\.html$/ }
 
   {}.tap do |hash|
@@ -123,6 +124,7 @@ if ENV['CIRCLE_TOKEN']
     hash['RuboCop inspection report'] = rubocop if rubocop
     hash['ESLint inspection report']  = eslint if eslint
     hash['Jest coverage report']      = jest if jest
+    hash['Brakeman issues report']    = brakeman if brakeman
   end.each do |msg, links|
     links = [*links]
     if links.size == 1
