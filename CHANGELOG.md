@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.4.3]
+### Added
+- add brakeman artifact extraction
+### Changed
+- updated netsoft-rubocop and rubocop config
+- remove old commit message style from checks
+- update PR template
+
+## [0.4.2]
+### Fixed
+- restrict simplecov version
+
 ## [0.4.1]
 ### Changed
 - exclude binary files in the grep calls
