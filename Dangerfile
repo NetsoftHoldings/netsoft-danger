@@ -117,12 +117,14 @@ if ENV['CIRCLE_TOKEN']
   eslint      = artifacts.find { |artifact| artifact.end_with?('eslint/report.html') }
   brakeman    = artifacts.find { |artifact| artifact.end_with?('brakeman/report.html') }
   rspec_files = artifacts.select { |artifact| artifact =~ /rspec-(.+)\.html$/ }
+  eslint_security = artifacts.find { |artifact| artifact.end_with?('eslint/report-security.json') }
 
   {}.tap do |hash|
     hash['Ruby coverage report']      = coverage if coverage
     hash['RSpec test report']         = rspec_files unless rspec_files.empty?
     hash['RuboCop inspection report'] = rubocop if rubocop
     hash['ESLint inspection report']  = eslint if eslint
+    hash['ESLint security report']    = eslint_security if eslint_security
     hash['Jest coverage report']      = jest if jest
     hash['Brakeman issues report']    = brakeman if brakeman
   end.each do |msg, links|
