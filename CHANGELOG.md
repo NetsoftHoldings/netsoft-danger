@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.4.4]
+### Changed
+- stop pushing to private gem server
+
 ## [0.4.3]
 ### Added
 - add brakeman artifact extraction
@@ -56,4 +60,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - package.json checks
 ### Fixed
 - requie older version of faraday until octokit is fixed (https://github.com/octokit/octokit.rb/pull/1154)
-
