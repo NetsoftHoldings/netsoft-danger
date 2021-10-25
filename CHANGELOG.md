@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.4.5]
+### Changed
+- remove the "fit left in tests" check
+
 ## [0.4.4]
 ### Changed
 - stop pushing to private gem server
