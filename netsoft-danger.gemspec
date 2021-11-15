@@ -13,7 +13,9 @@ Gem::Specification.new do |s|
   s.description = 'Packages a Dangerfile to be used with Danger.'
   s.executables << 'netsoft-circle'
 
-  s.files         = `git ls-files`.split("\n")
+  s.files = `git ls-files`.split("\n").reject { |f|
+    f.match?(%r{^\.github/}i)
+  }
   s.require_paths = ['lib']
 
   s.required_ruby_version = '>= 2.4'
