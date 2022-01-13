@@ -109,7 +109,7 @@ jobs:
         env:
           SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
         run: |
-          version=$(grep VERSION lib/hubstaff_webhooks/version.rb | sed -e "s/.*'\([^']*\)'.*/\1/")
+          version=$(grep VERSION lib/netsoft-danger/version.rb | sed -e "s/.*'\([^']*\)'.*/\1/")
           [[ "v$version" == "$SOURCE_TAG" ]] && { echo "VERSION $version matches $SOURCE_TAG"; exit 0; }
           [[ "v$version" != "$SOURCE_TAG" ]] && { echo "VERSION $version does not match $SOURCE_TAG"; exit 2; }
 
