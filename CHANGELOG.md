@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.5.0]
+### Changed
+- updated danger to 8.x
+
 ## [0.4.5]
 ### Changed
 - remove the "fit left in tests" check
