@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.7.0]
+### Changed
+- remove checks for migration and gemfile prefixes in commit messages
+
 ## [0.6.0]
 - remove the focus and print checks from the ruby danger (now handled by rubocop)
 
