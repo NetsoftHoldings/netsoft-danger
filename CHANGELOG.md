@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Next]
 ### Added
+- added check for bundler version in Gemfile.lock
 ### Changed
+- updated to bundler 2.3.9 for CI runs
 ### Fixed
 - silence intermittent error when removing a label
 
