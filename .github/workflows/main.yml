@@ -1,6 +1,5 @@
 name: netsoft-danger-main
 
-
 on:
   pull_request:
   push:
@@ -8,48 +7,37 @@ on:
       - v[0-9]+.[0-9]+.[0-9]+.[0-9a-z]+
       - v[0-9]+.[0-9]+.[0-9]+
 
+env:
+  BUNDLE_PATH: vendor/bundle
+  RAILS_ENV: test
+  RUBYOPT: '-KU -E utf-8:utf-8'
 
 jobs:
-
   backend:
     name: Rubocop
     runs-on: [self-hosted, ubuntu-t3.medium]
-    container:
-      image: public.ecr.aws/q0j1f2t0/ruby:2.5.5-bionic
-      options: --user 1000
-      env:
-        BUNDLE_PATH: vendor/bundle
-        BUNDLE_VERSION: 1.17.3
-        BUNDLE_JOBS: 4
-        BUNDLE_RETRY: 3
-        RAILS_ENV: test
-        RUBYOPT: '-KU -E utf-8:utf-8'
-    
+
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Install Bundler
+      # "cache-version" for the "ruby/setup-ruby" step should be bumped every time
+      # apt dependencies change
+      - name: Install dependencies
         shell: bash
         run: |
-          gem install bundler --version=$BUNDLE_VERSION --no-document
+          sudo apt-get -yq --no-install-recommends install \
+            build-essential
 
-      - uses: actions/cache@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          path: |
-            vendor/bundle
-            Gemfile.lock
-          key: netsoft-danger-bundle-${{ hashFiles('Gemfile') }}-${{ hashFiles('netsoft-danger.gemspec') }}
-          restore-keys: |
-            netsoft-danger-bundle-${{ hashFiles('Gemfile') }}-${{ hashFiles('netsoft-danger.gemspec') }}
-            netsoft-danger-bundle-
+          ruby-version: 2.7.8
+          bundler-cache: true
+          bundler: 2.3.9
+          cache-version: 1.0
 
-      - name: 'Bundler install'
-        shell: bash
-        run: |
-          bundle _${BUNDLE_VERSION}_ check || bundle _${BUNDLE_VERSION}_ install --retry=$BUNDLE_RETRY
-
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: $HOME/.cache/rubocop_cache
           key: netsoft-danger-rubocop-${{ hashFiles('.rubocop.yml') }}
@@ -60,10 +48,7 @@ jobs:
       - name: Rubocop
         shell: bash
         run: |
-          bundle _${BUNDLE_VERSION}_ exec rubocop \
-            --parallel \
-            --format progress
-
+          bundle exec rubocop -P -f progress
 
   publish:
     name: Publish
@@ -71,24 +56,17 @@ jobs:
       github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     needs: [ backend ]
     runs-on: [self-hosted, ubuntu-t3.medium]
-    container:
-      image: public.ecr.aws/q0j1f2t0/ruby:2.5.5-bionic
-      options: --user 1000
-      env:
-        BUNDLE_PATH: vendor/bundle
-        BUNDLE_VERSION: 1.17.3
-        BUNDLE_JOBS: 4
-        BUNDLE_RETRY: 3
-        RAILS_ENV: test
-        RUBYOPT: '-KU -E utf-8:utf-8'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Install Bundler
-        shell: bash
-        run: |
-          gem install bundler --version=$BUNDLE_VERSION --no-document
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.8
+          bundler-cache: true
+          bundler: 2.3.9
+          cache-version: 1.0
 
       - name: Get Tag Name
         id: tag_name
@@ -129,50 +107,24 @@ jobs:
       github.event_name == 'pull_request' && always()
     needs: [ backend ]
     runs-on: [self-hosted, ubuntu-t3.medium]
-    container:
-      image: public.ecr.aws/q0j1f2t0/ruby:2.5.5-bionic
-      options: --user 1000
-      env:
-        BUNDLE_PATH: vendor/bundle
-        BUNDLE_VERSION: 1.17.3
-        BUNDLE_JOBS: 4
-        BUNDLE_RETRY: 3
-        RUBYOPT: '-KU -E utf-8:utf-8'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Install Bundler
-        shell: bash
-        run: |
-          gem install bundler --version=$BUNDLE_VERSION --no-document
-
-      - uses: actions/cache@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          path: |
-            vendor/bundle
-            Gemfile.lock
-          key: netsoft-danger-bundle-${{ hashFiles('Gemfile') }}-${{ hashFiles('netsoft-danger.gemspec') }}
-          restore-keys: |
-            netsoft-danger-bundle-${{ hashFiles('Gemfile') }}-${{ hashFiles('netsoft-danger.gemspec') }}
-            netsoft-danger-bundle-
-
-      - name: Install Bundler
-        shell: bash
-        run: |
-          gem install bundler --version=$BUNDLE_VERSION --no-document
+          ruby-version: 2.7.8
+          bundler-cache: true
+          bundler: 2.3.9
+          cache-version: 1.0
 
       - name: Build Danger
         shell: bash
         run: |
           gem build *.gemspec
-
-      - name: 'Bundler install'
-        shell: bash
-        run: |
-          bundle _${BUNDLE_VERSION}_ check || bundle _${BUNDLE_VERSION}_ install --retry=$BUNDLE_RETRY
 
       - name: Run danger
         shell: bash
