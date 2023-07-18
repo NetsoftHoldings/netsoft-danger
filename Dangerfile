@@ -26,6 +26,12 @@ if File.exist?('Gemfile')
   end
 end
 
+if File.exist?('Gemfile.lock')
+  if `grep -e "^BUNDLED WITH$" -A 1 Gemfile.lock | grep '    ' | grep -v "\(2\.3\.9\)"`.length > 1
+    fail('gemfile.lock: Gemfile was not bundled with approved bundler version. Please use 2.3.9')
+  end
+end
+
 if github.branch_for_head.start_with?('security')
   toggle_label(github, 'security', true)
 end
