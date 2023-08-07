@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 ### Changed
 ### Fixed
+- silence intermittent error when removing a label
 
 ## [0.7.0]
 ### Changed
