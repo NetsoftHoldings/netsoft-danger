@@ -10,6 +10,8 @@ def toggle_label(github, label, should_set)
   elsif !should_set && has_label
     github.api.remove_label(repo_name, pr_number, label)
   end
+rescue
+  # noop
 end
 
 if File.exist?('Gemfile')
