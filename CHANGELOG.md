@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Next]
 ### Added
+### Changed
+### Fixed
+
+## [0.8.0]
+### Added
 - added check for bundler version in Gemfile.lock
 ### Changed
 - updated to bundler 2.3.9 for CI runs
