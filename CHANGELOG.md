@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.8.0]
+### Added
+- added check for bundler version in Gemfile.lock
+### Changed
+- updated to bundler 2.3.9 for CI runs
+### Fixed
+- silence intermittent error when removing a label
+
 ## [0.7.0]
 ### Changed
 - remove checks for migration and gemfile prefixes in commit messages

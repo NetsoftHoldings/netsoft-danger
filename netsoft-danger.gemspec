@@ -13,12 +13,10 @@ Gem::Specification.new do |s|
   s.description = 'Packages a Dangerfile to be used with Danger.'
   s.executables << 'netsoft-circle'
 
-  s.files = `git ls-files`.split("\n").reject { |f|
-    f.match?(%r{^\.github/}i)
-  }
+  s.files = `git ls-files`.split("\n").grep_v(%r{^\.github/}i)
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 2.5'
 
   s.add_runtime_dependency 'danger', '~> 8.0'
   s.add_runtime_dependency 'faraday'
@@ -27,5 +25,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake'
 
-  s.add_development_dependency 'netsoft-rubocop', '= 1.1.2'
+  s.add_development_dependency 'netsoft-rubocop', '= 1.1.5'
 end

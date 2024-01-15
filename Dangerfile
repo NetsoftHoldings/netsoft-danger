@@ -10,6 +10,8 @@ def toggle_label(github, label, should_set)
   elsif !should_set && has_label
     github.api.remove_label(repo_name, pr_number, label)
   end
+rescue
+  # noop
 end
 
 if File.exist?('Gemfile')
@@ -21,6 +23,12 @@ if File.exist?('Gemfile')
   end
   if `grep -r -e "^ *gem 'hubstaff_[a-z]\\+" Gemfile | grep -e ",.\\+[' ][0-9.]\\+'" | grep -v '~>' `.length > 1
     fail('gemfile: Release hubstaff_* gems should be using a ~> version')
+  end
+end
+
+if File.exist?('Gemfile.lock')
+  if `grep -e "^BUNDLED WITH$" -A 1 Gemfile.lock | grep '    ' | grep -v "\(2\.3\.9\)"`.length > 1
+    fail('gemfile.lock: Gemfile was not bundled with approved bundler version. Please use 2.3.9')
   end
 end
 
