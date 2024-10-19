@@ -1,0 +1,59 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+.[0-9a-z]+
+      - v[0-9]+.[0-9]+.[0-9]+
+
+env:
+  BUNDLE_PATH: vendor/bundle
+  RAILS_ENV: test
+  RUBYOPT: '-KU -E utf-8:utf-8'
+
+jobs:
+  tests-unit:
+    uses: ./.github/workflows/main.yml
+    secrets: inherit
+
+  publish:
+    name: Publish
+    needs: [tests-unit]
+    runs-on: [self-hosted, linux, x64, small]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/workflows/composite-actions/dependencies
+
+      - name: Get Tag Name
+        id: tag_name
+        shell: bash
+        run: |
+          echo "SOURCE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Tag Name Validation
+        shell: bash
+        run: |
+          [ -z "${{ env.SOURCE_TAG }}" ] && { echo "Tag is empty"; exit 1;}
+          echo "We are on tag: [ ${SOURCE_TAG} ]"
+
+      - name: VERSION Validation
+        shell: bash
+        env:
+          SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
+        run: |
+          version=$(grep VERSION lib/netsoft-danger/version.rb | sed -e "s/.*'\([^']*\)'.*/\1/")
+          [[ "v$version" == "${{ env.SOURCE_TAG }}" ]] && { echo "VERSION $version matches ${{ env.SOURCE_TAG }}"; exit 0; }
+          [[ "v$version" != "${{ env.SOURCE_TAG }}" ]] && { echo "VERSION $version does not match ${{ env.SOURCE_TAG }}"; exit 2; }
+
+      - name: Release Gem
+        shell: bash
+        env:
+          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+        run: |
+          ./bin/setup-rubygems.sh
+           rm -rf pkg
+           rake build
+           gem push pkg/*.gem
